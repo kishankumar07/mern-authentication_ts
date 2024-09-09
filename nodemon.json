@@ -1,7 +1,0 @@
-{
-    "watch": ["backend"],
-    "ext": ".ts,.js",
-    "ignore": [],
-    "exec": "node --loader ts-node/esm ./backend/server.ts"
-  }
-  

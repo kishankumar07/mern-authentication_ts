@@ -11,23 +11,23 @@
   },
   "devDependencies": {
     "@types/bcryptjs": "^2.4.6",
+    "@types/cookie-parser": "^1.4.7",
     "@types/express": "^4.17.21",
     "@types/jsonwebtoken": "^9.0.6",
     "@types/mongoose": "^5.11.97",
     "@types/node": "^22.5.2",
-    "nodemon": "^3.1.4",
-    "ts-node": "^10.9.2",
+    "rimraf": "^6.0.1",
+    "ts-node-dev": "^2.0.0",
     "typescript": "^5.5.4"
   },
   "name": "mern-auth-typescript",
   "version": "1.0.0",
-  "type": "module",
-  "main": "server.ts",
+  "main": "./backend/server.ts",
   "scripts": {
     "test": "node backend/server.js",
-    "server": "nodemon",
-    "build": "tsc",
-    "start": "node dist/server.js"
+    "dev": "ts-node-dev --poll --files src/server.ts express.d.ts",
+    "build": "rimraf dist && tsc",
+    "server": "nodemon --exec ts-node backend/server.ts"
   },
   "keywords": [],
   "author": "",
