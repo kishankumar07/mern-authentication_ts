@@ -20,6 +20,7 @@ const protect = asyncHandler(async(req:Request,res:Response,next:NextFunction)=>
             const decoded = jwt.verify(token,process.env.JWT_SECRET);
             if(typeof decoded === 'object' && decoded !== null){
                 req.user = await User.findById(decoded.userId).select('-password');
+                console.log('req.user at authMidlleware :',req.user)
             }
             
             next()

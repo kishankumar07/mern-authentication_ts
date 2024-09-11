@@ -17,6 +17,7 @@ const authUser = asyncHandler(async(req:Request,res:Response)=>{
             _id:user.id,
             name:user.name,
             email:user.email,
+            profileImage:user.profileImage
         })
     }else{
         res.status(401);
@@ -45,7 +46,8 @@ const registerUser = asyncHandler(async(req:Request,res:Response)=>{
         res.status(201).json({
             _id:user.id,
             name:user.name,
-            email:user.email
+            email:user.email,
+            profileImage:user.profileImage,
         })
     }else{
         res.status(400);
@@ -84,6 +86,11 @@ const updateUserProfile = asyncHandler(async(req:Request,res:Response)=>{
     if(user){
         user.name = req.body.name || user.name;
         user.email = req.body.email || user.email;
+        // console.log('update profile worked',req)
+        if(req.file){
+            console.log('there is req.file :',req.file)
+            user.profileImage = `/uploads/${req.file.filename}`;
+        }
 
         if(req.body.password){
             user.password = req.body.password;
@@ -93,6 +100,7 @@ const updateUserProfile = asyncHandler(async(req:Request,res:Response)=>{
             _id:updatedUser._id,
             name:updatedUser.name,
             email:updatedUser.email,
+            profileImage:updatedUser.profileImage,
         })
     }else{
         res.status(404);

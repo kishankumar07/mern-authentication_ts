@@ -1,5 +1,5 @@
-import { useState, useEffect, FormEvent } from 'react';
-import { Form, Button } from 'react-bootstrap';
+import { useState, useEffect, FormEvent, ChangeEvent } from 'react';
+import { Form, Button, Col, Row } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
 import FormContainer from '../components/FormContainer';
 import { toast } from 'react-toastify';
@@ -13,6 +13,7 @@ const ProfileScreen = () => {
   const [name, setName] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
+  const [image, setImage] = useState<File | null>(null);
 
     const {userInfo} = useSelector((state:RootState) => state.auth);
     const dispatch = useDispatch();
@@ -25,19 +26,36 @@ const ProfileScreen = () => {
     },[userInfo.email,userInfo.name])
 
 
+    const handleImageUpload =(e:ChangeEvent<HTMLInputElement>)=>{
+        const target = e.target as HTMLInputElement;
+            if(target.files && target.files[0]){
+                setImage(target.files[0]);
+            }
+    }
+
     const submitHandler = async (e:FormEvent) => {
         e.preventDefault();
         if (password !== confirmPassword) {
           toast.error('Passwords do not match');
         } else {
           try {
-            const res = await updateProfile({
-              _id: userInfo._id,
-              name,
-              email,
-              password,
-            }).unwrap();
+
+
+            const formData =new FormData();
+            formData.append('_id',userInfo._id);
+            formData.append('name',name);
+            formData.append('email',email);
+            if(password) formData.append('password',password);
+            if(image) formData.append('profileImage',image);
+
+            console.log([...formData.entries()]);
+
+
+            const res = await updateProfile( formData ).unwrap();
             dispatch(setCredentials({ ...res }));
+            
+            console.log('user updated successfully, this message youll see after response came from backend node.js',res)
+
             toast.success('Profile updated successfully');
           } catch (err) {
             //First check whether  error has a property called 'status'.
@@ -59,9 +77,32 @@ const ProfileScreen = () => {
 
   return (
     <FormContainer>
-      <h1>Update Profile</h1>
+      <h1 className='text-center'>Update Profile</h1>
 
-      <Form onSubmit={submitHandler}>
+      <Form onSubmit={submitHandler} encType='multipart/form-data'>
+    <Row className='align-items-center'>
+
+    <Col xs={12} className='text-center my-3'>
+      {userInfo.profileImage && (
+         <img 
+         src={userInfo.profileImage} 
+         alt="Profile" 
+         style={{ width: '150px', height: '150px', borderRadius: '50%',objectFit:'cover' }}
+     />
+      )}
+    </Col>
+
+      {/* Form fields */}
+      <Col xs={12}>
+        <Form.Group className='my-2' controlId='image'>
+            <Form.Label>Profile Picture</Form.Label>
+            <Form.Control
+                type='file' onChange={handleImageUpload}
+            ></Form.Control>
+        </Form.Group>
+
+
+
         <Form.Group className='my-2' controlId='name'>
           <Form.Label>Name</Form.Label>
           <Form.Control
@@ -103,6 +144,8 @@ const ProfileScreen = () => {
         <Button type='submit' variant='primary' className='mt-3'>
           Update
         </Button>
+      </Col>
+    </Row>
       </Form>
     </FormContainer>
   );

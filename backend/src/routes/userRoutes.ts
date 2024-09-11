@@ -2,6 +2,7 @@ import express from 'express'
 const router = express.Router();
 import { authUser,registerUser,logoutUser,getUserProfile,updateUserProfile } from '../controllers/userController';
 import { protect } from '../middleware/authMiddleware';
+import upload from '../config/multerConfig';
 
 router.post('/auth',authUser);
 router.post('/',registerUser)
@@ -11,6 +12,6 @@ router.post('/logout',logoutUser);
 router
 .route('/profile')
 .get(protect,getUserProfile)
-.put(protect,updateUserProfile);
+.put(protect,upload.single('profileImage'),updateUserProfile);
 
 export default router; 
