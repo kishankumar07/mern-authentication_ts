@@ -12,12 +12,13 @@ const authUser = asyncHandler(async(req:Request,res:Response)=>{
     const {email,password}:{email:string,password:string}= req.body;
     const user = await User.findOne({email});
     if(user && await user.matchPassword(password)){
-        generateToken(res,user.id);
-        res.status(201).json({
+        generateToken(res,user.id,'user');
+        res.status(201).json({data:{
             _id:user.id,
             name:user.name,
             email:user.email,
             profileImage:user.profileImage
+        },message:"profile image can be added while editing the user profile"
         })
     }else{
         res.status(401);
@@ -42,7 +43,7 @@ const registerUser = asyncHandler(async(req:Request,res:Response)=>{
     
 
     if(user){
-        generateToken(res,user.id);
+        generateToken(res,user.id,'user');
         res.status(201).json({
             _id:user.id,
             name:user.name,

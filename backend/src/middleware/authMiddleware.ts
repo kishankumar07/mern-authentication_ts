@@ -5,7 +5,7 @@ import { NextFunction, Request, Response } from 'express'
 
 
 
-
+//Protect Route middleware
 const protect = asyncHandler(async(req:Request,res:Response,next:NextFunction)=>{
  
     let token:string;
@@ -19,11 +19,11 @@ const protect = asyncHandler(async(req:Request,res:Response,next:NextFunction)=>
             }
             const decoded = jwt.verify(token,process.env.JWT_SECRET);
             if(typeof decoded === 'object' && decoded !== null){
-                req.user = await User.findById(decoded.userId).select('-password');
-                console.log('req.user at authMidlleware :',req.user)
+                req.user = await User.findById((decoded as {userId:string}).userId).select('-password');
+                // console.log('req.user at authMidlleware :',req.user)
             }
-            
             next()
+
         }catch(err){
             res.status(401);
             throw new Error('Not authorized, invalid token');
@@ -39,4 +39,16 @@ const protect = asyncHandler(async(req:Request,res:Response,next:NextFunction)=>
     }
 })
 
-export {protect}
+//Admin middleware
+
+const admin = asyncHandler(async(req:Request,res:Response,next:NextFunction) =>{
+    if(req.user && req.user?.isAdmin){
+        next();
+    }else{
+        res.status(401);
+        throw new Error('Not authorised as an admin');
+    }
+} )
+
+
+export {protect, admin}

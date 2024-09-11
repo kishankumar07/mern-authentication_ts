@@ -6,6 +6,7 @@ export interface IUser extends Document{
     email:string;
     password:string;
     profileImage?:string;
+    isAdmin?:boolean;
     matchPassword(enteredPassword: string): Promise<boolean>;
 }
 
@@ -26,6 +27,10 @@ const userSchema =new mongoose.Schema<IUser>({
     profileImage:{
         type:String,
     },
+    isAdmin:{
+        type:Boolean,
+        default:false,
+    }
 },{timestamps:true})
 
 userSchema.pre<IUser>('save',async function (next){
