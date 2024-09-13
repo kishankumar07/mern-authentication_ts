@@ -11,7 +11,7 @@ router.post('/logout',logoutAdmin);
 //Have to be protected and only works with authorization
 router.get('/getUsers',protect,admin,getUsers);
 router.get('/getUserInfo/:id',protect,admin,getUserInfo);
-router.post('/updateUserInfo',protect,admin,updateUserInfo);
+router.put('/updateUserInfo',protect,admin,updateUserInfo);
 router.post('/deleteUser/:id',protect,admin,deleteUser);
 router.post('/createUser',protect,admin,createUser)
 

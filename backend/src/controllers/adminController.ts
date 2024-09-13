@@ -61,7 +61,9 @@ const logoutAdmin  = asyncHandler(async(req:Request,res:Response) =>{
 //access    Private
 const getUserInfo = asyncHandler(async(req:Request,res:Response) =>{
     const userId = req.params.id;
+    // console.log('user id:',userId);
     const userInfo = await User.findById(userId);
+    // console.log('user info when user needed :',userInfo);
     // console.log('user found by admin is:',userInfo)
     res.status(200).json({userInfo});
 })
@@ -71,7 +73,9 @@ const getUserInfo = asyncHandler(async(req:Request,res:Response) =>{
 //@route    POST /api/admin/updateUserInfo
 //access    Private
 const updateUserInfo = asyncHandler(async(req:Request,res:Response)=>{
+   
     const {id,name,email} = req.body;
+    
     const updateUser = await User.findByIdAndUpdate({_id:id},{$set:{name,email}},{upsert:true});
     if(updateUser){
         res.status(200).json({message:'User updated'});
@@ -80,7 +84,7 @@ const updateUserInfo = asyncHandler(async(req:Request,res:Response)=>{
         throw new Error('Error updating the user');
     }
 })
-
+ 
 //@desc     Delete a user by id
 //route     POST /api/admin/deleteUser
 //access    Private

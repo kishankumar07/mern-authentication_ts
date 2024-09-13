@@ -2,13 +2,13 @@ import { Response } from 'express';
 import jwt from 'jsonwebtoken'
 import { ObjectId } from 'mongodb';
 
-const generateToken = (res:Response,userId:ObjectId,role:string) =>{
+const generateToken = (res:Response,userId:ObjectId,role:'user' | 'admin') =>{
 
     if(!process.env.JWT_SECRET){
         throw new Error('No value of secret provided at env file')
     }
 
-    const token = jwt.sign({userId,role},process.env.JWT_SECRET,{ expiresIn:'30m'});
+    const token = jwt.sign({userId,role},process.env.JWT_SECRET,{ expiresIn:'30d'});
     // console.log('this is the token at generate token :',token)
     res.cookie('jwt',token,{
         httpOnly:true,
