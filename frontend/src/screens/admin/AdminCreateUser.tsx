@@ -4,7 +4,7 @@ import { FormEvent, useState } from "react"
 import { useCreateUserMutation } from "../../slices/adminApiSlice"
 import { useNavigate } from "react-router-dom"
 import { toast } from "react-toastify"
-import Loader from "../../components/Loader"
+
 
 const AdminCreateUser = () => {
 
@@ -14,11 +14,22 @@ const AdminCreateUser = () => {
     const [password,setPassword] = useState('');
     const [confirmPassword,setConfirmPassword] = useState('');
 
-    const [createUser,{loading}] = useCreateUserMutation()
+    const [createUser] = useCreateUserMutation()
 
     const handleFormSubmit = async(e:FormEvent) =>{
         e.preventDefault()
         try{
+          if(!name || !email || !password){
+            toast.error('All fields are required')
+            return
+          }
+          else if(password !== confirmPassword){
+            toast.error('Password do not match')
+            return
+          }
+          
+
+
              await createUser({name,email,password}).unwrap();
             navigate('/admin/dashboard');
         }catch(err){
@@ -54,7 +65,7 @@ const AdminCreateUser = () => {
     <Form.Group className="mb-3" controlId="checkbox">
       <Form.Check type="checkbox" label="Check me out" />
     </Form.Group>
-    {loading && <Loader/>}
+    
     <Button variant="primary" type="submit">
       Submit
     </Button>

@@ -35,8 +35,16 @@ const ProfileScreen = () => {
 
     const submitHandler = async (e:FormEvent) => {
         e.preventDefault();
-        if (password !== confirmPassword) {
+
+        if (!name || !email) {
+          toast.error('Name and Email fields cannot be empty');
+          return;
+        }
+
+
+        if (password && password !== confirmPassword) {
           toast.error('Passwords do not match');
+          return;
         } else {
           try {
 

@@ -1,6 +1,6 @@
 import { Button, Form } from "react-bootstrap"
 import FormContainer from "../../components/FormContainer"
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { useAdLoginMutation } from "../../slices/adminApiSlice";
@@ -20,6 +20,13 @@ const AdminLogin = () => {
 
   const [adminLogin,{isLoading}] = useAdLoginMutation();
   const { adminInfo } =useSelector((state:RootState) =>state.admin)
+
+
+  useEffect(()=>{
+      if(adminInfo){
+        navigate('/admin/dashboard');
+      }
+  })
 
 
   const submitHandler = async(e:React.FormEvent) =>{

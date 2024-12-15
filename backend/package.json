@@ -27,7 +27,8 @@
     "test": "node backend/server.js",
     "dev": "ts-node-dev --poll --files src/server.ts express.d.ts",
     "build": "rimraf dist && tsc",
-    "server": "nodemon --exec ts-node backend/server.ts"
+    "server": "nodemon --exec ts-node backend/server.ts",
+    "start":"node dist/server.js"
   },
   "keywords": [],
   "author": "",

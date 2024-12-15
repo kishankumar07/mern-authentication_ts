@@ -5,6 +5,10 @@ import {
 } from "../../slices/adminApiSlice";
 import { LinkContainer } from "react-router-bootstrap";
 import { toast } from "react-toastify";
+import { useSelector } from "react-redux";
+import { RootState } from "../../store";
+import { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 
 interface User{
   _id:string;
@@ -16,12 +20,21 @@ interface User{
 
 
 const AdminDashboard = () => {
+  const navigate  = useNavigate()
   const { data, isLoading, error } = useGetUsersQuery(
     {},
     { refetchOnMountOrArgChange: true }
   );
-
+  const isAdminLogged = useSelector((state:RootState)=>state.admin.adminInfo)
   const [deleteUser] = useDeleteUserMutation();
+
+  useEffect(()=>{
+    if(!isAdminLogged){
+      navigate('/admin/login')
+    }
+  },[isAdminLogged,navigate])
+
+
 
   if (isLoading) return <p>Loading...</p>;
   if (error) return <p>Error loading users.</p>;
@@ -41,6 +54,7 @@ const AdminDashboard = () => {
       toast.error(errorMessage);
     }
   };
+
 
   return (
     <Container className="d-flex justify-content-center flex-column align-items-center mt-5">

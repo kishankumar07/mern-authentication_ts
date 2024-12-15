@@ -31,11 +31,21 @@ useEffect(()=>{
     const handleFormSubmit =async(e:FormEvent) =>{
         e.preventDefault();
         try{
+          
+          if(!name || !email){
+            toast.error('Name or email cannot be empty');
+            return
+          }
+          else if(password !== confirmPassword){
+            toast.error('password do not match');
+            return
+          }
+
             await updateUser({id,name,email}).unwrap();
         
             navigate('/admin/dashboard')
         }catch(err){
-            const errorMessage = (err as {data?:{message?:string,error?:string}}).data?.message || (err as {error?:string}).error;
+            const errorMessage = (err as {data?:{message?:string,error?:string}}).data?.message 
             toast.error(errorMessage)
         }
     }

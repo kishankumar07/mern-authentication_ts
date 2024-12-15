@@ -6,11 +6,13 @@ import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { useAdLogoutMutation } from '../../slices/adminApiSlice';
 import { adminLogout } from '../../slices/adminAuthSlice';
+import { RootState } from '../../store';
 
 function AdminHeader() {
 
   const dispatch = useDispatch();
-  const navigate = useNavigate()
+  const navigate = useNavigate();
+  const isAdminLogged = useSelector((state:RootState)=>state.admin.adminInfo)
   const [adminLogoutApiCall] = useAdLogoutMutation()
 
   const logoutHandler =async() =>{
@@ -33,14 +35,20 @@ function AdminHeader() {
       <Container>
         <Navbar.Brand style={{color:'#fff'}}>MERN Auth</Navbar.Brand>
 
-          <NavDropdown title="Hello admin" id="basic-nav-dropdown">
+
+        {isAdminLogged && (
+                    <NavDropdown title="Hello admin" id="basic-nav-dropdown">
             
-              <NavDropdown.Item href="#action/3.3">Profile</NavDropdown.Item>
-              <NavDropdown.Divider />
-              <NavDropdown.Item onClick={()=>{logoutHandler()}}>
-              Logout
-              </NavDropdown.Item>
-            </NavDropdown>
+                    <NavDropdown.Item href="#action/3.3">Profile</NavDropdown.Item>
+                    <NavDropdown.Divider />
+      
+                  
+                    <NavDropdown.Item onClick={()=>{logoutHandler()}}>
+                    Logout
+                    </NavDropdown.Item>
+                  </NavDropdown>
+              )}
+        
            
          
       </Container>

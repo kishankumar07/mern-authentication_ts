@@ -75,14 +75,23 @@ const getUserInfo = asyncHandler(async(req:Request,res:Response) =>{
 const updateUserInfo = asyncHandler(async(req:Request,res:Response)=>{
    
     const {id,name,email} = req.body;
-    
-    const updateUser = await User.findByIdAndUpdate({_id:id},{$set:{name,email}},{upsert:true});
-    if(updateUser){
-        res.status(200).json({message:'User updated'});
-    }else{
-        res.status(401);
-        throw new Error('Error updating the user');
+
+    const existingUser = await User.findOne({email});
+
+    if(existingUser && existingUser.id.toString() !== id){
+        throw new Error('Email already registered by other user');
     }
+
+
+    const user = await User.findById(id);
+    if (!user) {
+      throw new Error('User not found')
+    }
+    user.name = name;
+    user.email = email;
+    
+    await user.save();
+    res.json({ message: 'User updated successfully' });
 })
  
 //@desc     Delete a user by id
@@ -107,7 +116,7 @@ const createUser = asyncHandler(async(req:Request,res:Response) =>{
     const existingUser = await User.findOne({email});
     if(existingUser){
         res.status(400);
-        throw new Error('User already exists');
+        throw new Error('User already exists!');
     }
 
     const user = new User({
