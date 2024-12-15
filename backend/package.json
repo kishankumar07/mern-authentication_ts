@@ -7,7 +7,8 @@
     "express-async-handler": "^1.2.0",
     "jsonwebtoken": "^9.0.2",
     "mongodb": "^6.8.0",
-    "mongoose": "^8.6.0"
+    "mongoose": "^8.6.0",
+    "rimraf": "^6.0.1"
   },
   "devDependencies": {
     "@types/bcryptjs": "^2.4.6",
@@ -16,7 +17,6 @@
     "@types/jsonwebtoken": "^9.0.6",
     "@types/mongoose": "^5.11.97",
     "@types/node": "^22.5.2",
-    "rimraf": "^6.0.1",
     "ts-node-dev": "^2.0.0",
     "typescript": "^5.5.4"
   },
@@ -28,7 +28,7 @@
     "dev": "ts-node-dev --poll --files src/server.ts express.d.ts",
     "build": "rimraf dist && tsc",
     "server": "nodemon --exec ts-node backend/server.ts",
-    "start":"node dist/server.js"
+    "start": "node dist/server.js"
   },
   "keywords": [],
   "author": "",
