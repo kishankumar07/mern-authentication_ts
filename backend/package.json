@@ -7,8 +7,7 @@
     "express-async-handler": "^1.2.0",
     "jsonwebtoken": "^9.0.2",
     "mongodb": "^6.8.0",
-    "mongoose": "^8.6.0",
-    "rimraf": "^6.0.1"
+    "mongoose": "^8.6.0"
   },
   "devDependencies": {
     "@types/bcryptjs": "^2.4.6",
@@ -26,7 +25,7 @@
   "scripts": {
     "test": "node backend/server.js",
     "dev": "ts-node-dev --poll --files src/server.ts express.d.ts",
-    "build": "rimraf dist && tsc",
+    "build": "tsc",
     "server": "nodemon --exec ts-node backend/server.ts",
     "start": "node dist/server.js"
   },
